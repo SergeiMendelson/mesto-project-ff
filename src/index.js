@@ -1,7 +1,11 @@
 import "./styles/index.css";
 import { initialCards } from "./components/cards.js";
 import { createCard } from "./components/card.js";
-import { openModal, closeModal } from "./components/modal.js";
+import {
+  openModal,
+  closeModal,
+  setupPopupListeners,
+} from "./components/modal.js";
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const profileEditButton = document.querySelector(".profile__edit-button");
@@ -22,7 +26,6 @@ const placeNameInput = formAddCard.querySelector(
   ".popup__input_type_card-name"
 );
 const placeLinkInput = formAddCard.querySelector(".popup__input_type_url");
-const template = document.querySelector("#card-template");
 const placesList = document.querySelector(".places__list");
 formEditProfile.addEventListener("submit", function (evt) {
   evt.preventDefault();
@@ -44,21 +47,14 @@ formAddCard.addEventListener("submit", function (evt) {
   formAddCard.reset();
   closeModal(addCardPopup);
 });
-profileEditButton.addEventListener("click", () => openModal(editProfilePopup));
-profileAddButton.addEventListener("click", () => openModal(addCardPopup));
-popups.forEach((popup) => {
-  const closeButton = popup.querySelector(".popup__close");
-  closeButton.addEventListener("click", () => closeModal(popup));
-  popup.addEventListener("click", (evt) => {
-    if (evt.target === popup) {
-      closeModal(popup);
-    }
-  });
+profileEditButton.addEventListener("click", function () {
+  openModal(editProfilePopup);
 });
-document.addEventListener("keydown", (evt) => {
-  if (evt.key === "Escape") {
-    popups.forEach(closeModal);
-  }
+profileAddButton.addEventListener("click", function () {
+  openModal(addCardPopup);
+});
+popups.forEach((popup) => {
+  setupPopupListeners(popup);
 });
 initialCards.forEach((card) => {
   const cardElement = createCard(card, openModal, imagePopup);

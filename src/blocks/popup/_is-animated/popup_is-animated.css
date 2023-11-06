@@ -10,3 +10,4 @@
     /* Delay visibility: hidden until the end of the opacity animation, but only on the fade-out direction */
     transition: visibility 0s 0.6s, opacity 0.6s;
 }
+
