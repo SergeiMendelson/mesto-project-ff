@@ -8,15 +8,6 @@ export function closeModal(popup) {
   popup.classList.remove("popup_is-opened");
   popup.classList.add("popup_is-animated");
   document.removeEventListener("keydown", handleEscClose);
-  popup.addEventListener("transitionend", function transitionEnd(event) {
-    if (
-      event.propertyName === "opacity" &&
-      !popup.classList.contains("popup_is-opened")
-    ) {
-      popup.style.display = "none";
-    }
-    popup.removeEventListener("transitionend", transitionEnd);
-  });
 }
 function handleEscClose(event) {
   if (event.key === "Escape") {
