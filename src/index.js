@@ -15,6 +15,11 @@ import {
   addNewCard,
   updateAvatarOnServer,
 } from "./api.js";
+import {
+  openImagePopupHandler,
+  deleteCardHandler,
+  handleLikeHandler,
+} from "./components/cardHandlers.js";
 
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
@@ -69,7 +74,9 @@ function updateProfile() {
       profileDescription.textContent = userData.about;
       closeModal(editProfilePopup);
     })
-    .catch((err) => console.error(err))
+    .catch((err) =>
+      console.error("Ошибка при обновлении информации о пользователе:", err)
+    )
     .finally(() => {
       saveButton.textContent = "Сохранить";
       saveButton.disabled = false;
@@ -85,24 +92,37 @@ function createNewCard() {
   const saveButton = formAddCard.querySelector(".popup__button");
   saveButton.textContent = "Сохранение...";
   saveButton.disabled = true;
-
   const cardNameInput = formAddCard.querySelector(
     ".popup__input_type_card-name"
   );
   const linkInput = formAddCard.querySelector(".popup__input_type_url");
-
-  addNewCard(cardNameInput.value, linkInput.value)
-    .then((newCard) => {
-      const cardElement = createCard(newCard, openModal, imagePopup);
-      placesList.prepend(cardElement);
-      closeModal(addCardPopup);
-      formAddCard.reset();
+  getUserInfo()
+    .then((userData) => {
+      addNewCard(cardNameInput.value, linkInput.value)
+        .then((newCard) => {
+          const cardElement = createCard(
+            newCard,
+            openImagePopupHandler,
+            deleteCardHandler,
+            handleLikeHandler,
+            userData._id
+          );
+          placesList.prepend(cardElement);
+          closeModal(addCardPopup);
+          formAddCard.reset();
+          clearValidation(formAddCard, validationConfig);
+        })
+        .catch((err) =>
+          console.error("Ошибка при добавлении новой карточки:", err)
+        )
+        .finally(() => {
+          saveButton.textContent = "Сохранить";
+          saveButton.disabled = false;
+        });
     })
-    .catch((err) => console.error(err))
-    .finally(() => {
-      saveButton.textContent = "Сохранить";
-      saveButton.disabled = false;
-    });
+    .catch((err) =>
+      console.error("Ошибка при получении данных пользователя:", err)
+    );
 }
 
 formAddCard.addEventListener("submit", function (evt) {
@@ -111,11 +131,9 @@ formAddCard.addEventListener("submit", function (evt) {
 });
 
 profileImage.addEventListener("click", () => {
+  avatarUrlInput.value = "";
   openModal(updateAvatarPopup);
-  clearValidation(
-    updateAvatarPopup.querySelector(".popup__form"),
-    validationConfig
-  );
+  clearValidation(formUpdateAvatar, validationConfig);
 });
 
 function updateAvatar() {
@@ -125,13 +143,10 @@ function updateAvatar() {
 
   updateAvatarOnServer(avatarUrlInput.value)
     .then((userData) => {
-      console.log("Аватар успешно обновлен:", userData);
       profileImage.style.backgroundImage = `url('${userData.avatar}')`;
       closeModal(updateAvatarPopup);
     })
-    .catch((err) => {
-      console.error("Ошибка при обновлении аватара:", err);
-    })
+    .catch((err) => console.error("Ошибка при обновлении аватара:", err))
     .finally(() => {
       saveButton.textContent = "Сохранить";
       saveButton.disabled = false;
@@ -157,12 +172,19 @@ Promise.all([getUserInfo(), getInitialCards()])
   .then(([userData, cards]) => {
     profileTitle.textContent = userData.name;
     profileDescription.textContent = userData.about;
-
     profileImage.style.backgroundImage = `url('${userData.avatar}')`;
 
     cards.forEach((card) => {
-      const cardElement = createCard(card, openModal, imagePopup, userData._id);
+      const cardElement = createCard(
+        card,
+        openImagePopupHandler,
+        deleteCardHandler,
+        handleLikeHandler,
+        userData._id
+      );
       placesList.appendChild(cardElement);
     });
   })
-  .catch((err) => console.error(err));
+  .catch((err) =>
+    console.error("Ошибка при получении данных пользователя и карточек:", err)
+  );

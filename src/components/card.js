@@ -2,7 +2,13 @@
 
 import { putLike, deleteLike, deleteCard } from "../api.js";
 
-export function createCard(data, openModalFunction, imagePopupElement, userId) {
+export function createCard(
+  data,
+  openImagePopupHandler,
+  deleteCardHandler,
+  handleLikeHandler,
+  userId
+) {
   const template = document.querySelector("#card-template").content;
   const cardElement = template.cloneNode(true).querySelector(".card");
   const cardImage = cardElement.querySelector(".card__image");
@@ -15,39 +21,30 @@ export function createCard(data, openModalFunction, imagePopupElement, userId) {
   cardElement.querySelector(".card__title").textContent = data.name;
   likesCounter.textContent = data.likes.length;
 
+
   if (data.owner._id !== userId) {
     deleteButton.style.display = "none";
+  } else {
+    deleteButton.style.display = "block";
   }
 
-  likeButton.addEventListener("click", () => {
-    const isActive = likeButton.classList.contains(
-      "card__like-button_is-active"
-    );
-    (isActive ? deleteLike : putLike)(data._id)
-      .then((updatedCard) => {
-        likeButton.classList.toggle("card__like-button_is-active", !isActive);
-        likesCounter.textContent = updatedCard.likes.length;
-      })
-      .catch((error) => console.error("Ошибка при обработке лайка:", error));
-  });
+ 
+  const isLikedByCurrentUser = data.likes.some((like) => like._id === userId);
+  if (isLikedByCurrentUser) {
+    likeButton.classList.add("card__like-button_is-active");
+  }
 
-  deleteButton.addEventListener("click", () => {
-    if (window.confirm("Вы уверены, что хотите удалить эту карточку?")) {
-      deleteCard(data._id)
-        .then(() => {
-          cardElement.remove();
-        })
-        .catch((error) =>
-          console.error("Ошибка при удалении карточки:", error)
-        );
-    }
-  });
+  likeButton.addEventListener("click", () =>
+    handleLikeHandler(data._id, likeButton, likesCounter)
+  );
 
-  cardImage.addEventListener("click", () => {
-    openModalFunction(imagePopupElement);
-    imagePopupElement.querySelector(".popup__image").src = data.link;
-    imagePopupElement.querySelector(".popup__caption").textContent = data.name;
-  });
+  deleteButton.addEventListener("click", () =>
+    deleteCardHandler(data._id, cardElement)
+  );
+
+  cardImage.addEventListener("click", () =>
+    openImagePopupHandler(data.link, data.name)
+  );
 
   return cardElement;
 }

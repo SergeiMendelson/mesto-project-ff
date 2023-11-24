@@ -16,12 +16,7 @@ export const getUserInfo = () => {
     headers: {
       authorization: TOKEN,
     },
-  })
-    .then(checkResponse)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
+  }).then(checkResponse);
 };
 
 export const getInitialCards = () => {
@@ -29,12 +24,7 @@ export const getInitialCards = () => {
     headers: {
       authorization: TOKEN,
     },
-  })
-    .then(checkResponse)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
+  }).then(checkResponse);
 };
 
 export const updateUserInfo = (name, about) => {
@@ -45,12 +35,7 @@ export const updateUserInfo = (name, about) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ name, about }),
-  })
-    .then(checkResponse)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
+  }).then(checkResponse);
 };
 
 export const addNewCard = (name, link) => {
@@ -61,12 +46,7 @@ export const addNewCard = (name, link) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ name, link }),
-  })
-    .then(checkResponse)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
+  }).then(checkResponse);
 };
 
 export const putLike = (cardId) => {
@@ -75,12 +55,7 @@ export const putLike = (cardId) => {
     headers: {
       authorization: TOKEN,
     },
-  })
-    .then(checkResponse)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
+  }).then(checkResponse);
 };
 
 export const deleteLike = (cardId) => {
@@ -89,12 +64,7 @@ export const deleteLike = (cardId) => {
     headers: {
       authorization: TOKEN,
     },
-  })
-    .then(checkResponse)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
+  }).then(checkResponse);
 };
 
 export const deleteCard = (cardId) => {
@@ -103,14 +73,8 @@ export const deleteCard = (cardId) => {
     headers: {
       authorization: TOKEN,
     },
-  })
-    .then(checkResponse)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
+  }).then(checkResponse);
 };
-
 
 export const updateAvatarOnServer = (avatarUrl) => {
   return fetch(`${BASE_URL}/users/me/avatar`, {
@@ -120,10 +84,5 @@ export const updateAvatarOnServer = (avatarUrl) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ avatar: avatarUrl }),
-  })
-    .then(checkResponse)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
+  }).then(checkResponse);
 };
