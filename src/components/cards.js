@@ -1,3 +1,5 @@
+// cards.js
+
 export const initialCards = [
   {
     name: "Архыз",

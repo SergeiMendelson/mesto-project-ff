@@ -23,7 +23,14 @@
           <div
             class="profile__image"
             style="background-image: url('<%=require('./images/avatar.jpg')%>')"
-          ></div>
+          >
+            <div
+              class="profile__edit-icon"
+              style="
+                background-image: url('<%=require('./images/edit-icon.svg')%>');
+              "
+            ></div>
+          </div>
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
             <button class="profile__edit-button" type="button"></button>
@@ -48,15 +55,21 @@
               name="name"
               class="popup__input popup__input_type_name"
               placeholder="Имя"
+              minlength="2"
+              maxlength="40"
               required
             />
+            <span class="popup__error"></span>
             <input
               type="text"
               name="description"
               class="popup__input popup__input_type_description"
               placeholder="Занятие"
+              minlength="2"
+              maxlength="200"
               required
             />
+            <span class="popup__error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -67,14 +80,18 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Новое место</h3>
+
           <form class="popup__form" name="new-place">
             <input
               type="text"
               name="place-name"
               class="popup__input popup__input_type_card-name"
               placeholder="Название"
+              minlength="2"
+              maxlength="30"
               required
             />
+            <span class="popup__error"></span>
             <input
               type="url"
               name="link"
@@ -82,6 +99,7 @@
               placeholder="Ссылка на картинку"
               required
             />
+            <span class="popup__error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -95,15 +113,39 @@
           <p class="popup__caption"></p>
         </div>
       </div>
+
+      <div class="popup popup_type_update-avatar">
+        <div class="popup__content">
+          <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Обновить аватар</h3>
+          <form class="popup__form" name="update-avatar">
+            <input
+              type="url"
+              name="avatar-url"
+              class="popup__input popup__input_type_avatar-url"
+              placeholder="URL нового аватара"
+              required
+            />
+            <span class="popup__error"></span>
+            <button type="submit" class="button popup__button">
+              Сохранить
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
     <script type="module" src="src/index.js"></script>
+
     <template id="card-template">
       <li class="places__item card">
         <img class="card__image" src="" alt="" />
         <button type="button" class="card__delete-button"></button>
         <div class="card__description">
           <h2 class="card__title"></h2>
-          <button type="button" class="card__like-button"></button>
+          <div class="card__like-section">
+            <button type="button" class="card__like-button"></button>
+            <span class="card__likes-counter">0</span>
+          </div>
         </div>
       </li>
     </template>

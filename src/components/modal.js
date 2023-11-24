@@ -1,3 +1,5 @@
+// modal.js
+
 export function openModal(popup) {
   popup.style.display = "flex";
   popup.classList.add("popup_is-opened");

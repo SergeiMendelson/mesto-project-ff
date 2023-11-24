@@ -14,9 +14,26 @@
   margin-top: 48px;
 }
 
+.popup__button:disabled {
+  color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  background-color: white;
+  cursor: not-allowed;
+}
+
+
+/* через этот класс делаем кнопку неактивной пока оба поля не валидны */
+.popup__button_disabled {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+}
+
+
 .popup__button:hover {
   background: rgba(0, 0, 0, 0.8);
   cursor: pointer;
+  color: white;
 }
 
 @media screen and (max-width: 568px) {
@@ -24,4 +41,17 @@
     font-size: 14px;
     line-height: 17px;
   }
+}
+
+.popup__caption {
+  font-size: 12px;
+  line-height: 15px;
+  color: #fff;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 10px);
+  margin: 0;
+  /*
+    позиционируем абсолютно. В задании сказано только про максимальные размеры изображения.
+  */
 }
